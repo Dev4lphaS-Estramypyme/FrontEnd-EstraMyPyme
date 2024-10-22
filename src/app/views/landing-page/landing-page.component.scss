@@ -1,0 +1,107 @@
+.main-container {
+    background-color: #F4F5F7;
+}
+
+.contenedorr {
+    background-color: #ffffff;
+    padding: 3%;
+    border-radius: 15px;
+}
+
+.letra {
+    color: #A5A6AD;
+}
+
+.kanit-bold {
+    font-family: "Kanit", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.kanit-extralight {
+    font-family: "Kanit", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    text-align: justify;
+}
+
+.img2 {
+    width: 100%;
+    height: auto;
+}
+
+p {
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    font-size: 18px;
+}
+
+.btn {
+    background-color: #1C9AE1;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #000066;
+}
+
+.text1 {
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    font-size: 18px;
+}
+
+.image-wrapper {
+    background-image: url('../../../../public/assets/images/imgLanding/primerImg.png');
+    background-size: cover; 
+    background-position: center; 
+    height: 500px; 
+    padding: 5%;
+    border-radius: 15px;
+}
+
+.content-inner {
+    color: white;
+}
+
+.poppins-bold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.lato-regular {
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.lato-regular-italic {
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.lato-light {
+    font-family: "Lato", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.content2 {
+    background: url('../../../../public/assets/images/imgLanding/quintaImg.png') no-repeat center center;
+    background-size: cover;
+}
+
+.content3 {
+    background-image: url('../../../../public/assets/images/imgLanding/sextoImg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

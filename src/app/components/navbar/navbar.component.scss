@@ -1,0 +1,129 @@
+.eafit-logo{
+    width: 161px;
+    height: 61px;
+    margin: 0;
+}
+
+.estramipyme-logo{
+    width: 60px;
+    height: 60px;
+    margin: 0;
+}
+
+.button-icon{
+    width: 26px;
+    height: 24px;
+    margin-left: 4px;
+}
+
+.navbar{
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+}
+
+.navbar .menu{
+    display: none;
+}
+
+.navbar .menu-icon{
+    width: 30px;
+    height: 26px;
+}
+
+.navbar #estramipyme-logo{
+    margin-left: 10px;
+}
+
+
+.content-section{
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.navbar div{
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+button{
+    display: flex;
+    border: 2px solid #212529;
+    background-color: #212529;
+    color: white;
+    margin: 4px;
+    padding: 10px;
+    transition: 0.3s, transform 0.3s;
+}
+
+button:hover{
+    background-color: white;
+    color: #212529;
+    transform: scale(1.03);
+}
+
+#estramipyme-logo:hover{
+    cursor: pointer;
+}
+
+span{
+    margin: 0;
+}
+
+nav{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 0;
+    left: 0;
+}
+
+.navbar .menu .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 2px solid #000000;
+    border-radius: 10px;
+}
+
+.navbar .menu .mobile-menu.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 843px) {
+
+    @media (max-width: 300px) {
+
+        .navbar #estramipyme-logo span{ 
+            display: none;
+        }
+    
+    }
+
+    .navbar .content-section {
+        display: none;
+    }
+
+    .navbar .menu{
+        display: block;
+    }
+
+    .navbar{
+        justify-content: space-around;
+    }
+
+    .navbar #menu button{
+        background-color: white;
+    }
+
+
+}
+
+
