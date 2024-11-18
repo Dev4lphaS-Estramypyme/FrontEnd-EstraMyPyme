@@ -9,8 +9,10 @@ import { Admin } from '../models/admin';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:3000/usuarios';
-  private baseUrlAdmin= "http://localhost:3000/admins"
+  private baseUrl = 'http://localhost:8080/usersCompanies';
+  private baseUrlAdmin= "http://localhost:8080/api/users";
+  
+  
 
   isLoggedIn:boolean=false;
 
