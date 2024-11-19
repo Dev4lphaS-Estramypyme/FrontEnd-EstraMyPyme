@@ -9,17 +9,23 @@ import { Admin } from '../models/admin';
   providedIn: 'root'
 })
 export class AuthService {
+
   private baseUrl = 'http://localhost:8080/usersCompanies';
   private baseUrlAdmin= "http://localhost:8080/api/users";
   
   
 
+  // private baseUrlUsersCompanies = 'http://localhost:8080/usersCompanies';
+  private baseUrl = 'http://localhost:8080/usersCompanies';
+  private baseUrlAdmin= "http://localhost:3000/admins"
+
+
   isLoggedIn:boolean=false;
 
   constructor(private http: HttpClient) { }
 
-  registerUser(userDetails: any) {
-    return this.http.post(this.baseUrl, userDetails)
+  registerUser(userDetails: any): Observable<any> {
+    return this.http.post(this.baseUrl, userDetails);
   }
 
   login(email: string, password: string): Observable<User | null> {
@@ -68,4 +74,3 @@ export class AuthService {
     return this.isLoggedIn
   }
 }
-
