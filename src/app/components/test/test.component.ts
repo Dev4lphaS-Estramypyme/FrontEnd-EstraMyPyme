@@ -1,31 +1,24 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
-import { User } from '../../models/user';
-import { Test } from '../../models/test';
 import { TestService } from '../../services/test.service';
+import { Question } from '../../models/question'; // Asegúrate de tener un modelo para las preguntas
+import { Test } from '../../models/test'; // Asegúrate de tener un modelo para los tests
 
 @Component({
   selector: 'app-test',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './test.component.html',
-  styleUrl: './test.component.scss'
+  styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
   form: FormGroup = new FormGroup({});
+  questions: Question[] = [];
   currentStep = 1;
   totalSteps = 3;
 
-  user: User|null=null;
-  isFormSubmitted = false;
-
-  constructor (private router:Router,private fb: FormBuilder,
-  private userService:UserService,private testService:TestService){}
-
-  
+  constructor(private fb: FormBuilder, private testService: TestService, private router: Router) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -45,12 +38,37 @@ export class TestComponent implements OnInit {
         field9: ['', Validators.required],
       }),
     });
-    //Para referenciar a la empresa que está haciendo el test
-    this.userService.currentUser.subscribe({
-      next: user => {
-        this.user=user
+
+    const testId = '1'; // Reemplaza con el ID del test correspondiente
+    this.testService.getQuestionsByTestId(testId).subscribe({
+      next: (questions) => {
+        this.questions = questions;
+        this.initializeForm();
+      },
+      error: (error) => {
+        console.error('Error fetching questions', error);
       }
-    })
+    });
+  }
+
+  initializeForm() {
+    this.form = this.fb.group({
+      section1: this.fb.group({
+        field1: [{ value: this.questions[0]?.question, disabled: true }, Validators.required],
+        field2: [{ value: this.questions[1]?.question, disabled: true }, Validators.required],
+        field3: [{ value: this.questions[2]?.question, disabled: true }, Validators.required]
+      }),
+      section2: this.fb.group({
+        field4: [{ value: this.questions[3]?.question, disabled: true }, Validators.required],
+        field5: [{ value: this.questions[4]?.question, disabled: true }, Validators.required],
+        field6: [{ value: this.questions[5]?.question, disabled: true }, Validators.required],
+      }),
+      section3: this.fb.group({
+        field7: [{ value: this.questions[6]?.question, disabled: true }, Validators.required],
+        field8: [{ value: this.questions[7]?.question, disabled: true }, Validators.required],
+        field9: [{ value: this.questions[8]?.question, disabled: true }, Validators.required],
+      }),
+    });
   }
 
   nextStep() {
@@ -68,7 +86,7 @@ export class TestComponent implements OnInit {
   submitForm() {
     if (this.form.valid) {
       const testDetails: Test = {
-        id_empresa: this.user!.id as string,
+        id_empresa: '1', // Reemplaza con el ID de la empresa correspondiente
         pregunta1: this.form.get('section1.field1')!.value,
         pregunta2: this.form.get('section1.field2')!.value,
         pregunta3: this.form.get('section1.field3')!.value,
@@ -79,25 +97,39 @@ export class TestComponent implements OnInit {
         pregunta8: this.form.get('section3.field8')!.value,
         pregunta9: this.form.get('section3.field9')!.value,
       };
-      //Se envia la informacion al json server
+
+      // Enviar las respuestas al backend
+      const answers = [
+        { testId: testDetails.id_empresa, questionId: this.questions[0].id, answer: testDetails.pregunta1 },
+        { testId: testDetails.id_empresa, questionId: this.questions[1].id, answer: testDetails.pregunta2 },
+        { testId: testDetails.id_empresa, questionId: this.questions[2].id, answer: testDetails.pregunta3 },
+        { testId: testDetails.id_empresa, questionId: this.questions[3].id, answer: testDetails.pregunta4 },
+        { testId: testDetails.id_empresa, questionId: this.questions[4].id, answer: testDetails.pregunta5 },
+        { testId: testDetails.id_empresa, questionId: this.questions[5].id, answer: testDetails.pregunta6 },
+        { testId: testDetails.id_empresa, questionId: this.questions[6].id, answer: testDetails.pregunta7 },
+        { testId: testDetails.id_empresa, questionId: this.questions[7].id, answer: testDetails.pregunta8 },
+        { testId: testDetails.id_empresa, questionId: this.questions[8].id, answer: testDetails.pregunta9 },
+      ];
+
+      answers.forEach(answer => {
+        this.testService.createAnswer(answer).subscribe({
+          next: () => {
+            // Maneja la respuesta exitosa aquí
+          },
+          error: (error) => {
+            console.error('Error submitting answer', error);
+          }
+        });
+      });
+
       this.testService.registerTest(testDetails).subscribe({
-        next:() =>{
-          this.testService.updateisTestDone(this.user).subscribe({
-            next:()=>{
-              this.isFormSubmitted=true
-              this.user!.isTestDone=true
-            }
-          })
+        next: () => {
+          // Maneja la respuesta exitosa aquí
+        },
+        error: (error) => {
+          console.error('Error submitting test', error);
         }
-      })
+      });
     }
   }
-
-
-  goHome(){
-    this.router.navigateByUrl("/dashboard")
-  }
-
-
-
 }

@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../models/user';
-import { Admin } from '../models/admin';
 import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -19,11 +17,11 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/register`, userDetails);
   }
 
-  login(email: string, password: string): Observable<User | Admin | null> {
-    return this.http.post<User | Admin>(`${this.baseUrl}/login`, { email, password }).pipe(
-      map(user => {
-        if (user && user.password === password) {
-          return user;
+  login(email: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/login`, { email, password }).pipe(
+      map(response => {
+        if (response && response.user && response.user.password === password) {
+          return response;
         } else {
           return null;
         }
@@ -32,8 +30,8 @@ export class AuthService {
     );
   }
 
-  getUser(id: number): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/${id}`);
+  getUser(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
 
   getLogin() {

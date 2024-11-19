@@ -14,8 +14,6 @@ import { EstadoPruebaComponent } from './components/estado-prueba/estado-prueba.
 import { PruebasAdminComponent } from './views/pruebas-admin/pruebas-admin.component';
 import { PruebaDetailsComponent } from './views/prueba-details/prueba-details.component';
 
-
-
 export const routes: Routes = [
     { path: 'dashboard', component: DashboardViewComponent/*, canActivate: [CanActivateUser]*/,
         children: [
@@ -26,7 +24,6 @@ export const routes: Routes = [
             {
                 path:"test",
                 component:TestComponent
-
             },
             {
                 path:"profile",
@@ -39,6 +36,7 @@ export const routes: Routes = [
         ]
      },
     { path: 'dashboard-admin', component: DashboardAdminComponent /*,canActivate: [CanActivateUser]*/},
+    { path: 'dashboard-company', component: DashboardComponent /*,canActivate: [CanActivateUser]*/},
     { path: 'pruebas-admin', component: PruebasAdminComponent/*,canActivate: [CanActivateUser]*/},
     { path: 'prueba/:id', component:PruebaDetailsComponent/*,canActivate: [CanActivateUser]*/},
     { path: 'register', component: RegisterComponent },
@@ -53,4 +51,3 @@ export const routes: Routes = [
         pathMatch: 'full'
     }
 ];
-

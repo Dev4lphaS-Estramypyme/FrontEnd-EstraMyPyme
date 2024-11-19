@@ -6,8 +6,6 @@ import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/user';
-import { Admin } from '../../models/admin';
 
 @Component({
   selector: 'app-login',
@@ -39,13 +37,13 @@ export class LoginComponent {
       const password = passwordControl?.value ?? '';
 
       this.authService.login(email, password).subscribe({
-        next: (user: User | Admin | null) => {
-          if (user) {
+        next: (response: any) => {
+          if (response && response.user) {
             this.authService.isLoggedIn = true;
-            this.userService.login(user as User); // Cast to User
-            if ((user as Admin).roleName === 'Admin') { // Cast to Admin
+            this.userService.login(response.user);
+            if (response.role === 'Admin' || response.role === 'Student' || response.role === 'Teacher') {
               this.router.navigateByUrl("/dashboard-admin");
-            } else {
+            } else if (response.role === 'Company') {
               this.router.navigateByUrl("/dashboard");
             }
           } else {

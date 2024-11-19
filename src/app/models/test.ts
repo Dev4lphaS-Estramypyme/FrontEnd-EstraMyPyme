@@ -1,4 +1,4 @@
-export interface Test{
+export interface Test {
     id_empresa: string;
     pregunta1: string;
     pregunta2: string;
@@ -9,4 +9,4 @@ export interface Test{
     pregunta7: string;
     pregunta8: string;
     pregunta9: string;
-}
+  }
