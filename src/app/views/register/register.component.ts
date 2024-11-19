@@ -63,7 +63,19 @@ export class RegisterComponent implements OnInit {
     }
 
     if (this.registerForm.valid) {
-      const userData = { ...this.registerForm.value };
+      const userData = {
+        identificationNumber: idControl.value,
+        nameOrBusinessName: nameControl.value,
+        email: emailControl.value,
+        password: passwordControl.value,
+        typeUser: typeUserControl.value === '1' ? 'Natural' : 'Juridico',
+        companySize: sizeCompanyControl.value,
+        sector: sectorControl.value,
+        registrationDate: new Date().toISOString().split('T')[0], // Fecha actual
+        active: true,
+        isBookDownloaded: true
+      };
+
       this.authService.registerUser(userData).subscribe({
         next: response => {
           this.router.navigateByUrl("/login");
