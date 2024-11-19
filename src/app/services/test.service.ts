@@ -26,7 +26,7 @@ export class TestService {
   }
 
   updateisTestDone(user:any){
-    const url = `http://localhost:3000/usuarios/${user.id}`;
+    const url = `http://localhost:8080/api/users/${user.id}`;
 
     return this.http.patch(url, { isTestDone: true });
 

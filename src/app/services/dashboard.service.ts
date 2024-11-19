@@ -8,7 +8,7 @@ import { Test } from '../models/test';
   providedIn: 'root',
 })
 export class DashboardService {
-  private baseUrl = 'http://localhost:3000/usuarios';
+  private baseUrl = 'http://localhost:8080/userCompanies';
   private baseUrlTest= 'http://localhost:3000/tests'
 
   constructor(private http: HttpClient) {}
