@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [InfoSecComponent, CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
   isModalVisible: boolean = false;
@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
 
   onBookDownload(): void {
     if (this.user) {
-      this.http.put(`http://localhost:8080/usersCompanies/bookDownloaded/${this.user.email}`, {})
+      this.http.put(`http://localhost:8080/api/usersCompanies/bookDownloaded/${this.user.email}`, {})
         .subscribe(
           response => {
             console.log('Book download status updated successfully');

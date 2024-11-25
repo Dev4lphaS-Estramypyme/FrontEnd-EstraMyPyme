@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../models/user';
-import { Admin } from '../models/admin';
 import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -9,20 +7,26 @@ import { catchError, map, Observable, of } from 'rxjs';
 })
 export class AuthService {
 
-  private baseUrl = 'http://localhost:8080/api/users';
+  private baseUrl = 'http://localhost:8080/api/usersCompanies';
 
   isLoggedIn: boolean = false;
 
   constructor(private http: HttpClient) { }
 
   registerUser(userDetails: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register`, userDetails);
+    return this.http.post(`${this.baseUrl}/register`, userDetails).pipe(
+      catchError(error => {
+        console.error('Error al intentar registrar:', error);
+        return of(null);
+      })
+    );
   }
 
-  login(email: string, password: string): Observable<User | Admin | null> {
-    return this.http.post<User | Admin>(`${this.baseUrl}/login`, { email, password }).pipe(
+  login(email: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/login`, { email, password }).pipe(
       map(user => {
-        if (user && user.password === password) {
+        if (user) {
+          this.isLoggedIn = true;
           return user;
         } else {
           return null;
@@ -30,13 +34,5 @@ export class AuthService {
       }),
       catchError(() => of(null))
     );
-  }
-
-  getUser(id: number): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/${id}`);
-  }
-
-  getLogin() {
-    return this.isLoggedIn;
   }
 }
