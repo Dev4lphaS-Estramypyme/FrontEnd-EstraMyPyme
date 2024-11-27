@@ -1,11 +1,13 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { User } from '../../models/user';
+import { Admin } from '../../models/admin';
 
 @Component({
   selector: 'app-login',
@@ -37,34 +39,20 @@ export class LoginComponent {
       const password = passwordControl?.value ?? '';
 
       this.authService.login(email, password).subscribe({
-        next: user => {
+        next: (user: User | Admin | null) => {
           if (user) {
             this.authService.isLoggedIn = true;
-            this.userService.login(user);
-            this.router.navigateByUrl("/dashboard");
+            this.userService.login(user as User); // Cast to User
+            if ((user as Admin).roleName === 'Admin') { // Cast to Admin
+              this.router.navigateByUrl("/dashboard-admin");
+            } else {
+              this.router.navigateByUrl("/dashboard");
+            }
           } else {
-            // Si no se encuentra usuario(empresas) va a buscar a admin
-            this.authService.loginAdmin(email, password).subscribe({
-              next: admin => {
-                if (admin) {
-                  this.authService.isLoggedIn = true;
-                  this.userService.login(admin);
-                  this.router.navigateByUrl("/dashboard-admin");
-                } else {
-                  this.showMessage('Correo y/o contraseña incorrectos. Por favor, intenta nuevamente.', 'error');
-                  this.setInvalidClass(emailControl, passwordControl);
-                }
-              },
-              // Esto maneja el error si hay error en la petición get de admins
-              error: error => {
-                console.error('Error al intentar iniciar sesión:', error);
-                this.showMessage('Ocurrió un error al intentar iniciar sesión. Por favor, intenta nuevamente.', 'error');
-                this.setInvalidClass(emailControl, passwordControl);
-              }
-            });
+            this.showMessage('Correo y/o contraseña incorrectos. Por favor, intenta nuevamente.', 'error');
+            this.setInvalidClass(emailControl, passwordControl);
           }
         },
-        // Esto maneja el error si hay un error en la petición get de usuarios
         error: error => {
           console.error('Error al intentar iniciar sesión:', error);
           this.showMessage('Ocurrió un error al intentar iniciar sesión. Por favor, intenta nuevamente.', 'error');
