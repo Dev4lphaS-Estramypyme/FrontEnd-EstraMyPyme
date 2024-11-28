@@ -7,7 +7,6 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
-import { Admin } from '../../models/admin';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +18,8 @@ import { Admin } from '../../models/admin';
 export class LoginComponent {
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email, Validators.pattern(/.+@.+\..+/)]),
-    password: new FormControl('', Validators.required)
+    password: new FormControl('', Validators.required),
+    userType: new FormControl('user', Validators.required) // Añadido para seleccionar el tipo de usuario
   });
 
   errorMessage: string | null = null;
@@ -33,25 +33,55 @@ export class LoginComponent {
   login() {
     const emailControl = this.loginForm.get('email');
     const passwordControl = this.loginForm.get('password');
+    const userTypeControl = this.loginForm.get('userType');
 
     if (this.loginForm.valid) {
       const email = emailControl?.value ?? '';
       const password = passwordControl?.value ?? '';
+      const userType = userTypeControl?.value ?? 'user';
 
-      this.authService.login(email, password).subscribe({
-        next: (response: any) => {
-          const user = response.user;
-          const redirectUrl = response.redirectUrl;
-          this.authService.isLoggedIn = true;
-          this.userService.login(user as User); // Cast to User
-          this.router.navigateByUrl(redirectUrl);
-        },
-        error: error => {
-          console.error('Error al intentar iniciar sesión:', error);
-          this.showMessage('Ocurrió un error al intentar iniciar sesión. Por favor, intenta nuevamente.', 'error');
-          this.setInvalidClass(emailControl, passwordControl);
-        }
-      });
+      if (userType === 'user') {
+        // Intentar login como User
+        this.authService.login(email, password).subscribe({
+          next: (response: any) => {
+            if (response) {
+              const user = response.user;
+              const redirectUrl = response.redirectUrl;
+              this.authService.isLoggedIn = true;
+              this.userService.login(user as User); // Cast to User
+              this.router.navigateByUrl(redirectUrl);
+            } else {
+              this.showMessage('Correo y/o contraseña incorrectos.', 'error');
+              this.setInvalidClass(emailControl, passwordControl);
+            }
+          },
+          error: error => {
+            console.error('Error al intentar iniciar sesión:', error);
+            this.showMessage('Ocurrió un error al intentar iniciar sesión. Por favor, intenta nuevamente.', 'error');
+            this.setInvalidClass(emailControl, passwordControl);
+          }
+        });
+      } else {
+        // Intentar login como UserCompany
+        this.authService.loginCompany(email, password).subscribe({
+          next: (response: any) => {
+            if (response) {
+              const userCompany = response.userCompany;
+              const redirectUrl = response.redirectUrl;
+              this.authService.isLoggedIn = true;
+              this.router.navigateByUrl(redirectUrl);
+            } else {
+              this.showMessage('Correo y/o contraseña incorrectos.', 'error');
+              this.setInvalidClass(emailControl, passwordControl);
+            }
+          },
+          error: error => {
+            console.error('Error al intentar iniciar sesión como empresa:', error);
+            this.showMessage('Ocurrió un error al intentar iniciar sesión. Por favor, intenta nuevamente.', 'error');
+            this.setInvalidClass(emailControl, passwordControl);
+          }
+        });
+      }
     } else {
       if (emailControl?.hasError('pattern')) {
         this.showMessage('El correo debe contener un "@" válido.', 'error');

@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
         isBookDownloaded: true
       };
 
-      this.authService.registerUser(userData).subscribe({
+      this.authService.registerUserCompany(userData).subscribe({
         next: response => {
           this.router.navigateByUrl("/login");
         },

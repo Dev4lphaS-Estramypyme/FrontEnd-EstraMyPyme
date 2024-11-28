@@ -1,5 +1,5 @@
+<app-navbar></app-navbar>
 <div class="min-h-screen flex items-center justify-center">
-  <app-navbar></app-navbar>
   <div class="container mx-auto">
     <div class="flex justify-center items-center min-h-screen">
       <div class="w-full max-w-4xl">
@@ -27,6 +27,13 @@
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
                     <input type="password" formControlName="password" id="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched, 'is-valid': loginForm.get('password')?.valid && loginForm.get('password')?.touched}" />
                   </div>
+                  <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="userType">Tipo de Usuario</label>
+                    <select id="userType" formControlName="userType" class="w-full px-3 py-2 border rounded-lg">
+                      <option value="user">Usuario</option>
+                      <option value="company">Empresa</option>
+                    </select>
+                  </div>
                   <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                     {{ errorMessage }}
                   </div>
@@ -46,4 +53,3 @@
     </div>
   </div>
 </div>
-
