@@ -39,19 +39,12 @@ export class LoginComponent {
       const password = passwordControl?.value ?? '';
 
       this.authService.login(email, password).subscribe({
-        next: (user: User | Admin | null) => {
-          if (user) {
-            this.authService.isLoggedIn = true;
-            this.userService.login(user as User); // Cast to User
-            if ((user as Admin).roleName === 'Admin') { // Cast to Admin
-              this.router.navigateByUrl("/dashboard-admin");
-            } else {
-              this.router.navigateByUrl("/dashboard");
-            }
-          } else {
-            this.showMessage('Correo y/o contraseña incorrectos. Por favor, intenta nuevamente.', 'error');
-            this.setInvalidClass(emailControl, passwordControl);
-          }
+        next: (response: any) => {
+          const user = response.user;
+          const redirectUrl = response.redirectUrl;
+          this.authService.isLoggedIn = true;
+          this.userService.login(user as User); // Cast to User
+          this.router.navigateByUrl(redirectUrl);
         },
         error: error => {
           console.error('Error al intentar iniciar sesión:', error);

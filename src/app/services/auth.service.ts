@@ -7,7 +7,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 })
 export class AuthService {
 
-  private baseUrl = 'http://localhost:8080/api/usersCompanies';
+  private baseUrl = 'http://localhost:8080/api/users';
 
   isLoggedIn: boolean = false;
 
@@ -24,10 +24,10 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/login`, { email, password }).pipe(
-      map(user => {
-        if (user) {
+      map(response => {
+        if (response && response.user) {
           this.isLoggedIn = true;
-          return user;
+          return response;
         } else {
           return null;
         }

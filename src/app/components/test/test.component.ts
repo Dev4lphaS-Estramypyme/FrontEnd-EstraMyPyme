@@ -1,37 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { Test } from '../../models/test';
 import { TestService } from '../../services/test.service';
-import { DashboardService } from '../../services/dashboard.service';
-import { Question } from '../../models/question';
 
 @Component({
   selector: 'app-test',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './test.component.html',
-  styleUrls: ['./test.component.scss']
+  styleUrl: './test.component.scss'
 })
 export class TestComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   currentStep = 1;
   totalSteps = 3;
 
-  user: User | null = null;
+  user: User|null=null;
   isFormSubmitted = false;
-  questions: Question[] = [];
 
-  constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private userService: UserService,
-    private testService: TestService,
-    private dashboardService: DashboardService
-  ) {}
+  constructor (private router:Router,private fb: FormBuilder,
+  private userService:UserService,private testService:TestService){}
+
+  
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -51,20 +45,12 @@ export class TestComponent implements OnInit {
         field9: ['', Validators.required],
       }),
     });
-
-    // Para referenciar a la empresa que está haciendo el test
+    //Para referenciar a la empresa que está haciendo el test
     this.userService.currentUser.subscribe({
       next: user => {
-        this.user = user;
+        this.user=user
       }
-    });
-
-    // Obtener preguntas activas
-    this.dashboardService.getActiveQuestions().subscribe({
-      next: questions => {
-        this.questions = questions;
-      }
-    });
+    })
   }
 
   nextStep() {
@@ -93,21 +79,25 @@ export class TestComponent implements OnInit {
         pregunta8: this.form.get('section3.field8')!.value,
         pregunta9: this.form.get('section3.field9')!.value,
       };
-      // Se envia la informacion al json server
+      //Se envia la informacion al json server
       this.testService.registerTest(testDetails).subscribe({
-        next: () => {
+        next:() =>{
           this.testService.updateisTestDone(this.user).subscribe({
-            next: () => {
-              this.isFormSubmitted = true;
-              this.user!.isTestDone = true;
+            next:()=>{
+              this.isFormSubmitted=true
+              this.user!.isTestDone=true
             }
-          });
+          })
         }
-      });
+      })
     }
   }
 
-  goHome() {
-    this.router.navigateByUrl("/dashboard");
+
+  goHome(){
+    this.router.navigateByUrl("/dashboard")
   }
+
+
+
 }
